@@ -1,0 +1,24 @@
+# Target material file
+newmtl target_outer
+Ka 0.8 0.0 0.0
+Kd 1.0 0.0 0.0
+Ks 0.5 0.5 0.5
+Ns 50.0
+
+newmtl target_inner1
+Ka 0.0 0.0 0.8
+Kd 0.0 0.0 1.0
+Ks 0.5 0.5 0.5
+Ns 50.0
+
+newmtl target_inner2
+Ka 0.8 0.8 0.0
+Kd 1.0 1.0 0.0
+Ks 0.5 0.5 0.5
+Ns 50.0
+
+newmtl target_bullseye
+Ka 0.0 0.8 0.0
+Kd 0.0 1.0 0.0
+Ks 0.5 0.5 0.5
+Ns 50.0 
