@@ -52,29 +52,20 @@ class _SpaceShipState extends State<SpaceShip> with SingleTickerProviderStateMix
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Main ship body
-          CustomPaint(
-            size: Size(widget.size, widget.size * 1.5),
-            painter: SpaceShipPainter(
-              isMoving: widget.isMoving,
-              isFiring: widget.isFiring,
-            ),
-          ),
-          
-          // Engine flame when moving
+          // Engine flame when moving - positioned BELOW the ship
           if (widget.isMoving)
             Positioned(
-              bottom: 0,
+              bottom: -widget.size * 0.5, // Position below the ship
               child: AnimatedBuilder(
                 animation: _flameAnimation,
                 builder: (context, child) {
                   return Stack(
-                    alignment: Alignment.center,
+                    alignment: Alignment.topCenter, // Changed to topCenter
                     children: [
                       // Outer flame glow
                       Container(
-                        width: widget.size * 0.5 * _flameAnimation.value,
-                        height: widget.size * 0.8 * _flameAnimation.value,
+                        width: widget.size * 0.4 * _flameAnimation.value,
+                        height: widget.size * 0.6 * _flameAnimation.value,
                         decoration: BoxDecoration(
                           gradient: RadialGradient(
                             center: Alignment.topCenter,
@@ -91,8 +82,8 @@ class _SpaceShipState extends State<SpaceShip> with SingleTickerProviderStateMix
                       
                       // Main flame
                       Container(
-                        width: widget.size * 0.4,
-                        height: widget.size * (0.6 + 0.2 * math.sin(_controller.value * math.pi)),
+                        width: widget.size * 0.3,
+                        height: widget.size * (0.5 + 0.2 * math.sin(_controller.value * math.pi)),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -114,8 +105,8 @@ class _SpaceShipState extends State<SpaceShip> with SingleTickerProviderStateMix
                       
                       // Inner flame
                       Container(
-                        width: widget.size * 0.25,
-                        height: widget.size * (0.4 + 0.15 * math.cos(_controller.value * math.pi * 2)),
+                        width: widget.size * 0.2,
+                        height: widget.size * (0.3 + 0.15 * math.cos(_controller.value * math.pi * 2)),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -138,12 +129,12 @@ class _SpaceShipState extends State<SpaceShip> with SingleTickerProviderStateMix
                       // Flame particles
                       ...List.generate(5, (index) {
                         final random = math.Random(index);
-                        final offset = random.nextDouble() * 0.4 - 0.2;
-                        final size = random.nextDouble() * 0.1 + 0.05;
+                        final offset = random.nextDouble() * 0.3 - 0.15;
+                        final size = random.nextDouble() * 0.08 + 0.04;
                         final animValue = ((_controller.value + index * 0.2) % 1.0);
                         
                         return Positioned(
-                          bottom: widget.size * 0.7 * animValue,
+                          bottom: -widget.size * 0.5 * animValue,
                           left: widget.size * (0.5 + offset - size/2),
                           child: Opacity(
                             opacity: 1.0 - animValue,
@@ -163,6 +154,15 @@ class _SpaceShipState extends State<SpaceShip> with SingleTickerProviderStateMix
                 },
               ),
             ),
+            
+          // Main ship body - positioned ABOVE the flame
+          CustomPaint(
+            size: Size(widget.size, widget.size * 1.5),
+            painter: SpaceShipPainter(
+              isMoving: widget.isMoving,
+              isFiring: widget.isFiring,
+            ),
+          ),
           
           // Weapon fire when firing
           if (widget.isFiring)
