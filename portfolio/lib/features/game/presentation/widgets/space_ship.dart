@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
-class SpaceShip extends StatelessWidget {
+class SpaceShip extends StatefulWidget {
   final double size;
   final bool isMoving;
   final bool isFiring;
@@ -13,53 +14,164 @@ class SpaceShip extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SpaceShip> createState() => _SpaceShipState();
+}
+
+class _SpaceShipState extends State<SpaceShip> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _flameAnimation;
+  
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..repeat(reverse: true);
+    
+    _flameAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.2,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+  
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size,
-      height: size * 1.5,
+      width: widget.size,
+      height: widget.size * 1.5,
       child: Stack(
         alignment: Alignment.center,
         children: [
           // Main ship body
           CustomPaint(
-            size: Size(size, size * 1.5),
+            size: Size(widget.size, widget.size * 1.5),
             painter: SpaceShipPainter(
-              isMoving: isMoving,
-              isFiring: isFiring,
+              isMoving: widget.isMoving,
+              isFiring: widget.isFiring,
             ),
           ),
           
           // Engine flame when moving
-          if (isMoving)
+          if (widget.isMoving)
             Positioned(
               bottom: 0,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                width: size * 0.4,
-                height: isMoving ? size * 0.6 : 0,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.orange.shade600,
-                      Colors.orange.shade300,
-                      Colors.yellow.shade300,
+              child: AnimatedBuilder(
+                animation: _flameAnimation,
+                builder: (context, child) {
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Outer flame glow
+                      Container(
+                        width: widget.size * 0.5 * _flameAnimation.value,
+                        height: widget.size * 0.8 * _flameAnimation.value,
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            center: Alignment.topCenter,
+                            radius: 0.8,
+                            colors: [
+                              Colors.orange.shade300.withOpacity(0.3),
+                              Colors.orange.shade500.withOpacity(0.1),
+                              Colors.transparent,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(widget.size * 0.25),
+                        ),
+                      ),
+                      
+                      // Main flame
+                      Container(
+                        width: widget.size * 0.4,
+                        height: widget.size * (0.6 + 0.2 * math.sin(_controller.value * math.pi)),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.orange.shade600,
+                              Colors.orange.shade300,
+                              Colors.yellow.shade300,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(widget.size * 0.2),
+                            bottomRight: Radius.circular(widget.size * 0.2),
+                            topLeft: Radius.circular(widget.size * 0.05),
+                            topRight: Radius.circular(widget.size * 0.05),
+                          ),
+                        ),
+                      ),
+                      
+                      // Inner flame
+                      Container(
+                        width: widget.size * 0.25,
+                        height: widget.size * (0.4 + 0.15 * math.cos(_controller.value * math.pi * 2)),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.white,
+                              Colors.yellow.shade200,
+                              Colors.yellow.shade400,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(widget.size * 0.15),
+                            bottomRight: Radius.circular(widget.size * 0.15),
+                            topLeft: Radius.circular(widget.size * 0.05),
+                            topRight: Radius.circular(widget.size * 0.05),
+                          ),
+                        ),
+                      ),
+                      
+                      // Flame particles
+                      ...List.generate(5, (index) {
+                        final random = math.Random(index);
+                        final offset = random.nextDouble() * 0.4 - 0.2;
+                        final size = random.nextDouble() * 0.1 + 0.05;
+                        final animValue = ((_controller.value + index * 0.2) % 1.0);
+                        
+                        return Positioned(
+                          bottom: widget.size * 0.7 * animValue,
+                          left: widget.size * (0.5 + offset - size/2),
+                          child: Opacity(
+                            opacity: 1.0 - animValue,
+                            child: Container(
+                              width: widget.size * size,
+                              height: widget.size * size,
+                              decoration: BoxDecoration(
+                                color: Colors.orange.shade300,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                     ],
-                  ),
-                  borderRadius: BorderRadius.circular(size * 0.2),
-                ),
+                  );
+                },
               ),
             ),
           
           // Weapon fire when firing
-          if (isFiring)
+          if (widget.isFiring)
             Positioned(
-              top: -size * 0.3,
+              top: -widget.size * 0.3,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 100),
-                width: size * 0.2,
-                height: size * 0.5,
+                width: widget.size * 0.2,
+                height: widget.size * 0.5,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
@@ -70,7 +182,7 @@ class SpaceShip extends StatelessWidget {
                       Colors.lightBlue.shade100,
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(size * 0.1),
+                  borderRadius: BorderRadius.circular(widget.size * 0.1),
                 ),
               ),
             ),
