@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
 import 'package:portfolio/core/theme/theme_provider.dart';
-import 'package:portfolio/core/utils/app_router.dart';
+import 'package:portfolio/core/utils/router_config.dart';
 
 void main() {
   runApp(
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme(),
       darkTheme: AppTheme.darkTheme(),
       themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      routerConfig: appRouter,
+      routerConfig: routerConfig,
     );
   }
 }

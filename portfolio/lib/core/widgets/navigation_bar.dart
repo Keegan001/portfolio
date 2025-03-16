@@ -220,7 +220,13 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> with SingleTi
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
         onTap: () {
-          context.go(route);
+          try {
+            context.go(route);
+          } catch (e) {
+            print('Navigation error: $e');
+            // Fallback navigation
+            Navigator.of(context).pushNamed(route);
+          }
         },
         borderRadius: BorderRadius.circular(8),
         child: AnimatedContainer(
@@ -431,7 +437,13 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> with SingleTi
       child: ListTile(
         onTap: () {
           Navigator.pop(context);
-          context.go(route);
+          try {
+            context.go(route);
+          } catch (e) {
+            print('Navigation error: $e');
+            // Fallback navigation
+            Navigator.of(context).pushNamed(route);
+          }
         },
         leading: Icon(
           icon,
