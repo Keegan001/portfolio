@@ -112,15 +112,15 @@ class HomePage extends StatelessWidget {
           child: AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'Flutter Developer & UI/UX Designer',
+                'Flutter Developer',
                 speed: const Duration(milliseconds: 100),
               ),
               TypewriterAnimatedText(
-                'Mobile App Developer',
+                'AI & Machine Learning Developer',
                 speed: const Duration(milliseconds: 100),
               ),
               TypewriterAnimatedText(
-                'Web Developer',
+                'Django Developer',
                 speed: const Duration(milliseconds: 100),
               ),
             ],
@@ -138,7 +138,7 @@ class HomePage extends StatelessWidget {
           child: AnimatedTextKit(
             animatedTexts: [
               TypewriterAnimatedText(
-                'I build beautiful, responsive, and user-friendly mobile and web applications using Flutter.',
+                'I work on Flutter, Django, and AI/ML.',
                 speed: const Duration(milliseconds: 50),
               ),
             ],

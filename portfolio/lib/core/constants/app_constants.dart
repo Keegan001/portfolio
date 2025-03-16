@@ -1,10 +1,10 @@
 class AppConstants {
   // Personal Information
-  static const String name = 'John Doe';
+  static const String name = 'Divyam Jain';
   static const String title = 'Flutter Developer';
-  static const String email = 'john.doe@example.com';
+  static const String email = 'jain.divyam.271@gmail.com';
   static const String phone = '+1 (123) 456-7890';
-  static const String location = 'New York, USA';
+  static const String location = 'India';
   static const String bio = 'Passionate Flutter developer with expertise in creating beautiful, responsive, and feature-rich applications. Experienced in building cross-platform mobile apps and web applications using Flutter.';
   
   // Social Media Links
