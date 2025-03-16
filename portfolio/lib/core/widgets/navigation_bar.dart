@@ -219,7 +219,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> with SingleTi
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
-        onTap: () => context.go(route),
+        onTap: () {
+          context.go(route);
+        },
         borderRadius: BorderRadius.circular(8),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),

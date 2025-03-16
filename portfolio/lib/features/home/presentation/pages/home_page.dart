@@ -6,6 +6,7 @@ import 'package:portfolio/core/widgets/animated_card.dart';
 import 'package:portfolio/core/widgets/navigation_bar.dart';
 import 'package:portfolio/core/widgets/section_title.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -102,20 +103,47 @@ class HomePage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          'Flutter Developer & UI/UX Designer',
+        DefaultTextStyle(
           style: TextStyle(
             fontSize: isMobile ? 20 : 32,
             fontWeight: FontWeight.w300,
             color: Theme.of(context).colorScheme.onBackground.withOpacity(0.8),
           ),
+          child: AnimatedTextKit(
+            animatedTexts: [
+              TypewriterAnimatedText(
+                'Flutter Developer & UI/UX Designer',
+                speed: const Duration(milliseconds: 100),
+              ),
+              TypewriterAnimatedText(
+                'Mobile App Developer',
+                speed: const Duration(milliseconds: 100),
+              ),
+              TypewriterAnimatedText(
+                'Web Developer',
+                speed: const Duration(milliseconds: 100),
+              ),
+            ],
+            repeatForever: true,
+            pause: const Duration(milliseconds: 1000),
+            displayFullTextOnTap: true,
+          ),
         ),
         const SizedBox(height: 24),
-        Text(
-          'I build beautiful, responsive, and user-friendly mobile and web applications using Flutter.',
+        DefaultTextStyle(
           style: TextStyle(
             fontSize: isMobile ? 16 : 18,
             color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+          ),
+          child: AnimatedTextKit(
+            animatedTexts: [
+              TypewriterAnimatedText(
+                'I build beautiful, responsive, and user-friendly mobile and web applications using Flutter.',
+                speed: const Duration(milliseconds: 50),
+              ),
+            ],
+            totalRepeatCount: 1,
+            displayFullTextOnTap: true,
           ),
         ),
         const SizedBox(height: 32),
